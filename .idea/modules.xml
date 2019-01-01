@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/snail.iml" filepath="$PROJECT_DIR$/snail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/snail-model/snail-model.iml" filepath="$PROJECT_DIR$/snail-model/snail-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/snail-utils/snail-utils.iml" filepath="$PROJECT_DIR$/snail-utils/snail-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/snail-web/snail-web.iml" filepath="$PROJECT_DIR$/snail-web/snail-web.iml" />
+    </modules>
+  </component>
+</project>

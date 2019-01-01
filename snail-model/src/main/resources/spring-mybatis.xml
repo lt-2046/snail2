@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 下面的扫描不加也可以，但是在idea中，service层检查代码以来会报错（但是不影响代码运行），故加上这句话-->
+    <context:component-scan base-package="com.snail.*.mapper" />
+
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties" />
+    <!-- 配置数据源 -->
+
+    <!--p6spy连接设置-->
+    <bean id="dataSourceProxy" class="com.p6spy.engine.spy.P6DataSource">
+        <constructor-arg>
+            <ref bean="dataSource"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    <!--使用 Configuration 方式进行配置-->
+    <bean id="mybatisConfig" class="tk.mybatis.mapper.session.Configuration">
+        <!-- 配置通用 Mapper，有三种属性注入方式 -->
+        <property name="mapperProperties">
+            <value>
+                notEmpty=true,
+                INDENTITY=MYSQL,
+                mappers=tk.mybatis.mapper.common.Mapper,
+                ORDER=BEFORE,
+                jdbcTypeForNull=NULL
+            </value>
+        </property>
+    </bean>
+    <!-- 配置mybatis的sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <property name="dataSource" ref="dataSourceProxy" />
+        <property name="configuration" ref="mybatisConfig"/>
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.snail.model.m.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+</beans>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="myShiroRealm" class="com.snail.shiro.realm.MyShiroRealm">
+        <property name="cacheManager" ref="shiroSpringCacheManager"/>
+        <!-- 打开缓存 -->
+        <property name="cachingEnabled" value="true"/>
+        <!-- 打开身份认证缓存 -->
+        <property name="authenticationCachingEnabled" value="true"/>
+        <!-- 打开授权缓存 -->
+        <property name="authorizationCachingEnabled" value="true"/>
+        <!-- 缓存AuthenticationInfo信息的缓存名称 -->
+        <property name="authenticationCacheName" value="authenticationCache"/>
+        <!-- 缓存AuthorizationInfo信息的缓存名称 -->
+        <property name="authorizationCacheName" value="authorizationCache"/>
+    </bean>
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myShiroRealm"/>
+        <!--将缓存管理器，交给安全管理器-->
+        <property name="cacheManager" ref="shiroSpringCacheManager"/>
+        <property name="sessionManager" ref="sessionManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <bean id="myChainDefinitions" class="com.snail.shiro.definitions.MyChainDefinitions">
+        <property name="filterChainDefinitions">
+            <value>
+                / = anon
+                /charisma/** = anon
+                /m/login.do = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/"/>
+        <!--<property name="successUrl" value="/m/menu.do"/>-->
+        <!--<property name="unauthorizedUrl" value="/WEB-INF/page/error.jsp"/>-->
+        <!--自定义过滤的规则-->
+        <property name="filterChainDefinitionMap" ref="myChainDefinitions"/>
+        <!--<property name="filterChainDefinitions">-->
+        <!--<value>-->
+        <!--/sayHello = authc-->
+        <!--&lt;!&ndash;/gologin.html = anon /gologin.html 不需要权限验证就可以访问&ndash;&gt;-->
+        <!--&lt;!&ndash;/login.html = anon /login.html 不需要验证就可以访问&ndash;&gt;-->
+        <!--&lt;!&ndash;/doadd.html = authc, perms[perm1,perm2] /doadd.html 要有perm1和perm2权限才可以访问，访问成功后页面显示add&ndash;&gt;-->
+        <!--&lt;!&ndash;/doget.html = authc, perms[admin] /doget.html 要有admin权限才可以访问，访问成功后页面显示get&ndash;&gt;-->
+        <!--&lt;!&ndash;/doupdate.html = authc, perms[perm1] /doupdate.html 要有perm1权限才能访问，访问成功后页面显示update&ndash;&gt;-->
+        <!--&lt;!&ndash;/dodel.html = authc, perms[perm2] /dodel.html 要有perm2权限才可以访问，访问成功后页面显示del&ndash;&gt;-->
+        <!--&lt;!&ndash;-->
+        <!--anon:-->
+        <!--例子/admins/**=anon 没有参数，表示可以匿名使用。-->
+        <!--authc:-->
+        <!--例如/admins/user/**=authc表示需要认证(登录)才能使用，没有参数-->
+        <!--roles(角色)：-->
+        <!--例子/admins/user/**=roles[admin],参数可以写多个，参数之间用逗号分割，当有多个参数时，-->
+        <!--例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。-->
+        <!--perms（权限）：-->
+        <!--例子/admins/user/**=perms[add],参数可以写多个，例如/admins/user/**=perms["add, modify"]，-->
+        <!--当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。-->
+        <!--rest：-->
+        <!--例子/admins/user/**=rest[user],根据请求的方法，相当于/admins/user/**=perms[user:method] ,-->
+        <!--其中method为post，get，delete等。-->
+        <!--port：-->
+        <!--例子/admins/user/**=port[8081],当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,-->
+        <!--其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString-->
+        <!--是你访问的url里的？后面的参数。-->
+        <!--authcBasic：-->
+        <!--例如/admins/user/**=authcBasic没有参数.表示httpBasic认证-->
+        <!--ssl:-->
+        <!--例子/admins/user/**=ssl没有参数，表示安全的url请求，协议为https-->
+        <!--user:-->
+        <!--例如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查-->
+        <!--&ndash;&gt;-->
+        <!--</value>-->
+        <!--</property>-->
+        <!--配置自定义过滤器-->
+        <property name="filters">
+            <map>
+                <entry key="perms">
+                    <bean class="com.snail.shiro.filter.MyShiroPermFilter"></bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 配置自定义缓存管理器，中引入ECCache缓存管理器 -->
+    <bean id = "shiroSpringCacheManager" class="com.snail.shiro.cache.ShiroECCacheManager">
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <!-- Session Manager -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!-- 相隔多久检查一次session的有效性   -->
+        <property name="sessionValidationInterval" value="1800000"/>
+        <!-- session 有效时间为半小时 （毫秒单位）-->
+        <property name="globalSessionTimeout" value="1800000"/>
+        <property name="sessionDAO" ref="enterpriseCacheSessionDAO"/>
+        <!--session 监听，可以多个。-->
+        <!--<property name="sessionListeners">-->
+        <!--<list>-->
+        <!--<ref bean="customSessionListener"/>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!-- 间隔多少时间检查，不配置是60分钟 -->
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
+        <!-- 是否开启 检测，默认开启 -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <!-- url上带sessionId 默认为true -->
+        <property name="sessionIdUrlRewritingEnabled" value="false"/>
+        <!-- 是否删除无效的，默认也是开启 -->
+        <property name="deleteInvalidSessions" value="true"/>
+        <!-- 会话Cookie模板 -->
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
+    <!-- 会话DAO 用于会话的CRUD -->
+    <bean id="enterpriseCacheSessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+        <!-- Session缓存名字，配置30分钟过期 -->
+        <property name="activeSessionsCacheName" value="activeSessionCache"/>
+        <!--<property name="cacheManager" ref="shiroSpringCacheManager"/>-->
+        <!-- 定义该Session DAO操作中所使用的ID生成器 -->
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
+    <!-- 会话Session ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+
+    <!-- 手动操作Session，管理Session -->
+    <bean id="customSessionManager" class="com.snail.shiro.session.CustomEcSessionManager">
+        <property name="shiroECCacheManager" ref="shiroSpringCacheManager"/>
+        <property name="enterpriseCacheSessionDAO" ref="enterpriseCacheSessionDAO"/>
+    </bean>
+
+
+    <!-- 会话验证调度器 -->
+    <bean id="sessionValidationScheduler"
+          class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+        <!-- 间隔多少时间检查，不配置是60分钟 -->
+        <property name="interval" value="1800000"/>
+        <property name="sessionManager" ref="sessionManager"/>
+    </bean>
+
+
+
+
+    <!-- 会话Cookie模板 -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!--cookie的name，我故意取名叫xxxxbaidu -->
+        <constructor-arg value="snail_liutao"/>
+        <property name="httpOnly" value="true"/>
+        <!--cookie的有效时间 -->
+        <property name="maxAge" value="-1"/>
+        <!-- 配置存储Session Cookie的domain为 一级域名
+        <property name="domain" value=".itboy.net"/>
+         -->
+    </bean>
+    <!-- Session Manager -->
+
+
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!--秘钥要16位，24位或32位的Base64。这个解密后是1234567890abcdef-->
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('MTIzNDU2Nzg5MGFiY2RlZg==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMeShiro"/><!-- 浏览器中cookie的名字 -->
+        <property name="httpOnly" value="true"/><!--document对象中就看不到cookie了-->
+        <property name="maxAge" value="2592000"/><!-- 30天 -->
+    </bean>
+
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>
