@@ -1,5 +1,6 @@
 package com.snail.shiro.cache;
 
+import net.sf.ehcache.Element;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.cache.CacheException;
@@ -8,6 +9,7 @@ import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,9 +19,9 @@ public class ShiroECCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
     Logger logger = LogManager.getLogger(ShiroECCache.class.getName());
     private CacheManager cacheManager;
     private Cache cache;
-
+    private net.sf.ehcache.Ehcache ehcache;
     //    private RedisCache cache2;
-    public ShiroECCache(String name, CacheManager cacheManager) {
+    public ShiroECCache(String name, CacheManager cacheManager,net.sf.ehcache.CacheManager ehCacheManager) {
         if (name == null || cacheManager == null) {
             throw new IllegalArgumentException("cacheManager or CacheName cannot be null.");
         }
@@ -28,6 +30,7 @@ public class ShiroECCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
         //会设置它的过期时间如果没有配置过这个缓存的，那么默认的缓存时间是为0的，如果配置了，就会把配置的时间赋予给这个RedisCache
         //如果从缓存的过期时间为0，就表示这个RedisCache不存在了，这个redisCache实现了spring中的cache
         this.cache = cacheManager.getCache(name);
+        this.ehcache = ehCacheManager.getEhcache(name);
     }
 
     public V get(K key) throws CacheException {
@@ -79,11 +82,26 @@ public class ShiroECCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
         logger.error(cacheManager.getCacheNames());
         Collection<V> test = null;
         try {
-            ValueWrapper cacheV = cache.get("activeSessionCache");
+//            ValueWrapper cacheV = cache.get("activeSessionCache");
+//
+//            test = (Collection<V>) cacheV.get();
 
-            test = (Collection<V>) cacheV.get();
+            System.out.println(ehcache.getName());
+            List list = ehcache.getKeys();
+            for(Object l :list){
+                System.out.println(l);
+                Element temp = ehcache.get(l);
+                System.out.println(temp.getObjectValue());
+                ehcache.remove(l);
+                ValueWrapper cacheV = cache.get(l);
+                System.out.println(cacheV.get());
+            }
+            System.out.println(list);
+
+
+
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 //        return (Collection<V>) cache.get(cacheManager.getCacheNames()).get();
         return test;

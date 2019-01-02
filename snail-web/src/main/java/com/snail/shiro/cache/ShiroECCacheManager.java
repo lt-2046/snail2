@@ -7,6 +7,15 @@ import org.apache.shiro.util.Destroyable;
  */
 public class ShiroECCacheManager<K, V> implements CacheManager ,Destroyable {
     private org.springframework.cache.CacheManager cacheManager;
+    private  net.sf.ehcache.CacheManager ehCacheManager;
+
+    public net.sf.ehcache.CacheManager getEhCacheManager() {
+        return ehCacheManager;
+    }
+
+    public void setEhCacheManager(net.sf.ehcache.CacheManager ehCacheManager) {
+        this.ehCacheManager = ehCacheManager;
+    }
 
     public org.springframework.cache.CacheManager getCacheManager() {
         return cacheManager;
@@ -24,6 +33,6 @@ public class ShiroECCacheManager<K, V> implements CacheManager ,Destroyable {
         if (name == null ){
             return null;
         }
-        return new ShiroECCache<K,V>(name,getCacheManager());
+        return new ShiroECCache<K,V>(name,getCacheManager(),getEhCacheManager());
     }
 }

@@ -100,10 +100,11 @@
     </bean>
 
     <!-- 配置自定义缓存管理器，中引入ECCache缓存管理器 -->
+    <!-- 参考http://www.cnblogs.com/zfding/p/8536480.html-->
     <bean id = "shiroSpringCacheManager" class="com.snail.shiro.cache.ShiroECCacheManager">
         <property name="cacheManager" ref="cacheManager"/>
+        <property name="ehCacheManager" ref="ehcacheFactory"/>
     </bean>
-
     <!-- Session Manager -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <!-- 相隔多久检查一次session的有效性   -->
@@ -132,7 +133,7 @@
     <bean id="enterpriseCacheSessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
         <!-- Session缓存名字，配置30分钟过期 -->
         <property name="activeSessionsCacheName" value="activeSessionCache"/>
-        <!--<property name="cacheManager" ref="shiroSpringCacheManager"/>-->
+        <property name="cacheManager" ref="shiroSpringCacheManager"/>
         <!-- 定义该Session DAO操作中所使用的ID生成器 -->
         <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
     </bean>
