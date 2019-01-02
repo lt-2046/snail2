@@ -85,7 +85,7 @@ public class ShiroECCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
         }catch (Exception e){
 
         }
-
+//        return (Collection<V>) cache.get(cacheManager.getCacheNames()).get();
         return test;
 }
 
