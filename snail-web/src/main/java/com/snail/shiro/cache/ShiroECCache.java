@@ -82,10 +82,6 @@ public class ShiroECCache<K, V> implements org.apache.shiro.cache.Cache<K, V> {
         logger.error(cacheManager.getCacheNames());
         Collection<V> test = null;
         try {
-//            ValueWrapper cacheV = cache.get("activeSessionCache");
-//
-//            test = (Collection<V>) cacheV.get();
-
             System.out.println(ehcache.getName());
             List list = ehcache.getKeys();
             for(Object l :list){
