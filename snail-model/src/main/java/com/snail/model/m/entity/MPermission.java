@@ -11,10 +11,14 @@ public class MPermission {
     private String permissionName;
     @Column(name = "url")
     private String url;
-    @Column(name = "permission_num")
-    private Long permissionNum;
+    @Column(name = "parent_id")
+    private Long parentId;
     @Column(name = "start")
     private Long start;
+    @Column(name = "mark")
+    private String mark;
+    @Column(name = "version")
+    private String version;
 
     public Long getId() {
         return id;
@@ -40,14 +44,6 @@ public class MPermission {
         this.url = url;
     }
 
-    public Long getPermissionNum() {
-        return permissionNum;
-    }
-
-    public void setPermissionNum(Long permissionNum) {
-        this.permissionNum = permissionNum;
-    }
-
     public Long getStart() {
         return start;
     }
@@ -56,14 +52,40 @@ public class MPermission {
         this.start = start;
     }
 
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
         return "MPermission{" +
                 "id=" + id +
                 ", permissionName='" + permissionName + '\'' +
                 ", url='" + url + '\'' +
-                ", permissionNum=" + permissionNum +
+                ", parentId=" + parentId +
                 ", start=" + start +
+                ", mark='" + mark + '\'' +
+                ", version='" + version + '\'' +
                 '}';
     }
 }
