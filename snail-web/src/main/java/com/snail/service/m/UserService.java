@@ -11,12 +11,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +34,7 @@ public class UserService {
 
     @Autowired
     private CustomEcSessionManager customEcSessionManager;
+
     public void saveUser(UserVo userVo) {
 
         MUser user = new MUser();
@@ -60,32 +64,41 @@ public class UserService {
                 e.printStackTrace();
             }
         }
+        customEcSessionManager.getAllUser();
+        Session sessiom = SecurityUtils.getSubject().getSession();
+        System.out.println(sessiom.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
         return returnList;
     }
 
     public void login(LoginVo loginVo) throws Exception {
         Subject currentUser = SecurityUtils.getSubject();
 //        if (!currentUser.isAuthenticated()) {
-            UsernamePasswordToken token =
-                    new UsernamePasswordToken(loginVo.getUsername(), loginVo.getPassword());
-            token.setRememberMe(loginVo.isRememberMe());//是否记住用户
-            try {
-                currentUser.login(token);//执行登录
-                Object user = SecurityUtils.getSubject().getPrincipal();
-                System.out.println(user);
+        UsernamePasswordToken token =
+                new UsernamePasswordToken(loginVo.getUsername(), loginVo.getPassword());
+        token.setRememberMe(loginVo.isRememberMe());//是否记住用户
+        try {
+            currentUser.login(token);//执行登录
+            Object user = SecurityUtils.getSubject().getPrincipal();
+            System.out.println(user);
 
-                customEcSessionManager.getAllUser();
 
-            } catch (UnknownAccountException uae) {
-                throw new Exception("账户不存在");
-            } catch (IncorrectCredentialsException ice) {
-                throw new Exception("密码不正确");
-            } catch (LockedAccountException lae) {
-                throw new Exception("用户被锁定了 ");
-            } catch (AuthenticationException ae) {
-                ae.printStackTrace();
-                throw new Exception("未知错误");
-            }
+            customEcSessionManager.getAllUser();
+            Session sessiom = SecurityUtils.getSubject().getSession();
+
+            Collection<Object> attributeKeys = sessiom.getAttributeKeys();
+
+            System.out.println(sessiom.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
+
+        } catch (UnknownAccountException uae) {
+            throw new Exception("账户不存在");
+        } catch (IncorrectCredentialsException ice) {
+            throw new Exception("密码不正确");
+        } catch (LockedAccountException lae) {
+            throw new Exception("用户被锁定了 ");
+        } catch (AuthenticationException ae) {
+            ae.printStackTrace();
+            throw new Exception("未知错误");
+        }
 //        }
     }
 
