@@ -26,8 +26,7 @@ public class MPermissionController {
 
         List<PermissionVo> returnList = permissionService.findPermissionList();
 
-
-        map.put("rolePermissionList", returnList);
+        map.put("permissionList", returnList);
         return "/m/permission";
     }
 }

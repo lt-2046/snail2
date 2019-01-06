@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.snail.model.m.mapper.MPermissionMapper" >
+
+  <resultMap id="BaseResultMap" type="com.snail.model.m.entity.MPermission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="permission_name" property="permissionName" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="start" property="start" jdbcType="BIGINT" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="BIGINT" />
+  </resultMap>
+  <select id="selectAllPermission" resultMap="BaseResultMap">
+	  SELECT pp.* FROM m_permission pp,m_permission pc WHERE pp.parent_id=pc.id ORDER BY pp.parent_id,pp.id
+  </select>
+
+</mapper>

@@ -19,7 +19,8 @@ public class MPermission {
     private String mark;
     @Column(name = "version")
     private String version;
-
+    @Column(name = "order_num")
+    private Long orderNum;
     public Long getId() {
         return id;
     }
@@ -76,6 +77,14 @@ public class MPermission {
         this.version = version;
     }
 
+    public Long getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Long orderNum) {
+        this.orderNum = orderNum;
+    }
+
     @Override
     public String toString() {
         return "MPermission{" +
@@ -86,6 +95,7 @@ public class MPermission {
                 ", start=" + start +
                 ", mark='" + mark + '\'' +
                 ", version='" + version + '\'' +
+                ", orderNum=" + orderNum +
                 '}';
     }
 }

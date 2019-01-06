@@ -14,10 +14,12 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 下面的扫描不加也可以，但是在idea中，service层检查代码以来会报错（但是不影响代码运行），故加上这句话-->
-    <context:component-scan base-package="com.snail.*.mapper" />
+    <context:component-scan base-package="com.snail.*.mapper"/>
+
+
 
     <!-- 加载配置属性文件 -->
-    <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties" />
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:config.properties"/>
     <!-- 配置数据源 -->
 
     <!--p6spy连接设置-->
@@ -32,7 +34,31 @@
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="5"/>
+        <!--<property name="useSSL" value="false"></property>-->
+        <!-- 开启Druid的监控统计功能,StatFilter可以和其他的Filter配置使用 -->
+        <property name="filters" value="stat"/>
+
+        <!-- proxyFilters属性配置,通过bean的方式配置 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
     </bean>
+
+    <!-- 上面的druid的配置 -->
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4j2Filter">
+        <!-- 所有连接相关的日志 -->
+        <property name="connectionLogEnabled" value="true"/>
+        <!-- 所有Statement相关的日志 -->
+        <property name="statementLogEnabled" value="false"/>
+        <!-- 是否显示结果集 -->
+        <property name="resultSetLogEnabled" value="true"/>
+        <!-- 是否显示SQL语句 -->
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+
     <!--使用 Configuration 方式进行配置-->
     <bean id="mybatisConfig" class="tk.mybatis.mapper.session.Configuration">
         <!-- 配置通用 Mapper，有三种属性注入方式 -->
@@ -42,20 +68,28 @@
                 INDENTITY=MYSQL,
                 mappers=tk.mybatis.mapper.common.Mapper,
                 ORDER=BEFORE,
-                jdbcTypeForNull=NULL
+                jdbcTypeForNull=NULL,
+                typeAlias=
             </value>
         </property>
     </bean>
     <!-- 配置mybatis的sqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <!--<property name="dataSource" ref="dataSource" />-->
-        <property name="dataSource" ref="dataSourceProxy" />
+        <property name="dataSource" ref="dataSourceProxy"/>
         <property name="configuration" ref="mybatisConfig"/>
+        <property name="mapperLocations"  >
+            <list>
+                <!--<value>classpath:/com/snail/model/m/mapper/*.xml</value>-->
+                <value>classpath:/mapper/*.xml</value>
+            </list>
+        </property>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.snail.model.m.mapper" />
+        <property name="basePackage">
+            <value>com.snail.model.m.mapper</value>
+        </property>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 

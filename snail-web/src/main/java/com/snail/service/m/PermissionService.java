@@ -21,9 +21,11 @@ public class PermissionService {
     Logger logger = LogManager.getLogger(PermissionService.class.getName());
     @Autowired
     private MPermissionMapper permissionMapper;
+    @Autowired
 
     public List<PermissionVo> findPermissionList() {
-        List<MPermission> result = permissionMapper.selectAll();
+
+        List<MPermission> result = permissionMapper.selectAllPermission();
         List<PermissionVo> returnList = new ArrayList<PermissionVo>();
         for (MPermission permission : result) {
             PermissionVo permissionVoTemp = new PermissionVo();

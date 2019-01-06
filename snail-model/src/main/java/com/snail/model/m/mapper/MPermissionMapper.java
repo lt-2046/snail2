@@ -4,6 +4,8 @@ import com.snail.model.m.entity.MPermission;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.util.List;
+
 /**
  *
  * @author liutao
@@ -11,4 +13,5 @@ import tk.mybatis.mapper.common.Mapper;
  */
 @Component
 public interface MPermissionMapper extends Mapper<MPermission> {
+    List<MPermission> selectAllPermission();
 }

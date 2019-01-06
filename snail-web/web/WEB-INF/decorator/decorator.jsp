@@ -144,7 +144,7 @@
                                 </li>
                                 <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRole.do"><i class="glyphicon glyphicon-user"></i><span>角色管理</span></a>
                                 </li>
-                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRolePermission.do"><i class="glyphicon glyphicon-user"></i><span>角色与权限管理</span></a>
+                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRolePermission.do"><i class="glyphicon glyphicon-user"></i><span> 用户与角色管理</span></a>
                                 </li>
                                 <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findPermission.do"><i class="glyphicon glyphicon-user"></i><span>权限管理</span></a>
                                 </li>

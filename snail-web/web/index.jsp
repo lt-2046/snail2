@@ -161,14 +161,14 @@
                 <fieldset>
                     <div class="input-group input-group-lg">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
-                        <input id="username" name="username" type="text" class="form-control" placeholder="Username">
+                        <input id="username" name="username" type="text" value="liutao" class="form-control" placeholder="Username">
                     </div>
                     <div class="clearfix"></div>
                     <br>
 
                     <div class="input-group input-group-lg">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
-                        <input id="password" name="password" type="password" class="form-control"
+                        <input id="password" name="password" type="password" value="123456" class="form-control"
                                placeholder="Password">
                     </div>
                     <div class="clearfix"></div>

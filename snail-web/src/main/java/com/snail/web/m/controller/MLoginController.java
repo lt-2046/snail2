@@ -10,6 +10,7 @@ import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -52,8 +53,8 @@ public class MLoginController {
 
     }
     @RequestMapping(value = "/menu.do")
-    public String  menu(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    public String  menu(ModelMap map,LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+         map.put("hello","你好");
         return "menu";
 
     }
