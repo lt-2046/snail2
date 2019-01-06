@@ -3,6 +3,7 @@ package com.snail.service.m;
 import com.snail.model.m.entity.MUser;
 import com.snail.model.m.mapper.MUserMapper;
 import com.snail.shiro.session.CustomEcSessionManager;
+import com.snail.shiro.utils.TokenManager;
 import com.snail.web.m.vo.LoginVo;
 import com.snail.web.m.vo.UserVo;
 import org.apache.commons.beanutils.BeanUtils;
@@ -10,9 +11,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,22 +74,18 @@ public class UserService {
     }
 
     public void login(LoginVo loginVo) throws Exception {
-        Subject currentUser = SecurityUtils.getSubject();
 //        if (!currentUser.isAuthenticated()) {
-        UsernamePasswordToken token =
-                new UsernamePasswordToken(loginVo.getUsername(), loginVo.getPassword());
-        token.setRememberMe(loginVo.isRememberMe());//是否记住用户
+
         try {
-            currentUser.login(token);//执行登录
-            Object user = SecurityUtils.getSubject().getPrincipal();
-            System.out.println(user);
+            UserVo userVo = TokenManager.logIn(loginVo.getUsername(), loginVo.getPassword(), loginVo.isRememberMe(), UserVo.class);
+
+
+            System.out.println(userVo);
 
 
             customEcSessionManager.getAllUser();
             Session sessiom = SecurityUtils.getSubject().getSession();
-
             Collection<Object> attributeKeys = sessiom.getAttributeKeys();
-
             System.out.println(sessiom.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
 
         } catch (UnknownAccountException uae) {

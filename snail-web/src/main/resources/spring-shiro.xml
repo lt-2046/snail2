@@ -40,6 +40,7 @@
             <value>
                 / = anon
                 /charisma/** = anon
+                /bootstrap-treeview/** = anon
                 /m/login.do = anon
                 /** = authc
             </value>
@@ -91,9 +92,16 @@
         <!--</property>-->
         <!--配置自定义过滤器-->
         <property name="filters">
+
             <map>
-                <entry key="perms">
+                <entry key="login">
                     <bean class="com.snail.shiro.filter.MyShiroPermFilter"></bean>
+                </entry>
+                <entry key="role">
+                    <bean class="com.snail.shiro.filter.RoleFilter"></bean>
+                </entry>
+                <entry key="permission">
+                    <bean class="com.snail.shiro.filter.PermissionFilter"></bean>
                 </entry>
             </map>
         </property>

@@ -1,13 +1,14 @@
 package com.snail.web.m.controller;
 
+import com.snail.model.m.mapper.MPermissionMapper;
 import com.snail.service.m.UserService;
+import com.snail.shiro.utils.TokenManager;
+import com.snail.web.base.BaseController;
 import com.snail.web.m.vo.LoginVo;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.shiro.web.util.SavedRequest;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,11 +24,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/m")
-public class MLoginController {
+public class MLoginController extends BaseController{
     Logger logger = LogManager.getLogger(MLoginController.class.getName());
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private MPermissionMapper permissionMapper;
     @RequestMapping(value = "/login.do")
     @ResponseBody
     public Map<String,Object>  login(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -40,11 +42,8 @@ public class MLoginController {
          * shiro 获取登录之前的地址
          * 之前0.1版本这个没判断空。
          */
-        SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-        String url = null ;
-        if(null != savedRequest){
-            url = savedRequest.getRequestUrl();
-        }
+        String url = TokenManager.getSaveRequsetUrl(request); ;
+
         if(StringUtils.isBlank(url)){
             url = request.getContextPath() + "/m/menu.do";
         }
@@ -54,7 +53,6 @@ public class MLoginController {
     }
     @RequestMapping(value = "/menu.do")
     public String  menu(ModelMap map,LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
-         map.put("hello","你好");
         return "menu";
 
     }

@@ -24,6 +24,7 @@
     <mvc:resources mapping="/charisma/fonts/**" location="/charisma/fonts/" />
     <mvc:resources mapping="/charisma/bower_components/**" location="/charisma/bower_components/" />
     <mvc:resources mapping="/charisma/img/**" location="/charisma/img/" />
+    <mvc:resources mapping="/bootstrap-treeview/**" location="/bootstrap-treeview/" />
     <!-- 启动注解驱动，支持对象与json的转换。 -->
     <mvc:annotation-driven>
         <mvc:message-converters>
