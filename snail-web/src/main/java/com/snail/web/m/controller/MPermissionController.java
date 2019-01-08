@@ -1,7 +1,7 @@
 package com.snail.web.m.controller;
 
 import com.snail.service.m.PermissionService;
-import com.snail.utils.TreeNode;
+import com.snail.utils.tree.TreeNode;
 import com.snail.web.m.vo.PermissionVo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -24,15 +24,16 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/m")
-public class MLoginController extends BaseController{
+public class MLoginController extends BaseController {
     Logger logger = LogManager.getLogger(MLoginController.class.getName());
     @Autowired
     private UserService userService;
     @Autowired
     private MPermissionMapper permissionMapper;
+
     @RequestMapping(value = "/login.do")
     @ResponseBody
-    public Map<String,Object>  login(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map<String, Object> login(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> result = new HashedMap();
         userService.login(loginVo);
         result.put("status", 200);
@@ -42,18 +43,19 @@ public class MLoginController extends BaseController{
          * shiro 获取登录之前的地址
          * 之前0.1版本这个没判断空。
          */
-        String url = TokenManager.getSaveRequsetUrl(request); ;
+        String url = TokenManager.getSaveRequsetUrl(request);
+        ;
 
-        if(StringUtils.isBlank(url)){
+        if (StringUtils.isBlank(url)) {
             url = request.getContextPath() + "/m/menu.do";
         }
         result.put("back_url", url);
         return result;
 
     }
-    @RequestMapping(value = "/menu.do")
-    public String  menu(ModelMap map,LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return "menu";
 
+    @RequestMapping(value = "/menu.do")
+    public String menu(ModelMap map, LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return "menu";
     }
 }

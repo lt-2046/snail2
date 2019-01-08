@@ -2,8 +2,8 @@ package com.snail.service.m;
 
 import com.snail.model.m.entity.MPermission;
 import com.snail.model.m.mapper.MPermissionMapper;
-import com.snail.utils.Tree;
-import com.snail.utils.TreeNode;
+import com.snail.utils.tree.Tree;
+import com.snail.utils.tree.TreeNode;
 import com.snail.web.m.vo.PermissionVo;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
