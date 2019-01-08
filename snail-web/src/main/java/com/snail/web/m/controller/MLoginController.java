@@ -56,9 +56,12 @@ public class MLoginController extends BaseController {
 
     @RequestMapping(value = "/menu.do")
     public String menu(ModelMap map, LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String menuString = permissionService.findPermissionByMenu();
-        map.put("menu",menuString);
-        TokenManager.setVal2Session("menu",menuString);
+        String menu = (String) TokenManager.getVal2Session("menu");
+        if(menu==null){
+            String menuString = permissionService.findPermissionByMenu();
+            TokenManager.setVal2Session("menu",menuString);
+        }
+
         return "menu";
     }
 }
