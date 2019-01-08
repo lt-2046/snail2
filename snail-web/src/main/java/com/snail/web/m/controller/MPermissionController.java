@@ -1,7 +1,7 @@
 package com.snail.web.m.controller;
 
 import com.snail.service.m.PermissionService;
-import com.snail.utils.tree.TreeNode;
+import com.snail.utils.tree.Node;
 import com.snail.web.m.vo.PermissionVo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,9 +33,9 @@ public class MPermissionController {
     }
     @RequestMapping(value="/findPermissionByRole.do")
     @ResponseBody
-    public List<TreeNode> findPermissionByRole(ModelMap map) throws Exception {
+    public List<Node> findPermissionByRole(ModelMap map) throws Exception {
 
-        List<TreeNode> returnList = permissionService.findPermissionByRole();
+        List<Node> returnList = permissionService.findPermissionByRole();
 
 
         return returnList;

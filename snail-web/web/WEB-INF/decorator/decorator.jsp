@@ -1,6 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="com.snail.shiro.utils.TokenManager" %>
 <head>
     <meta charset="utf-8">
     <title>LIUTAO MAGANGE</title>
@@ -134,30 +136,42 @@
                     </div>
                     <ul class="nav nav-pills nav-stacked main-menu">
                         <li class="nav-header">Main</li>
+                        <%= TokenManager.getVal2Session("menu").toString()%>
+                        <%--<li><a class="ajax-link" href="#"><i class="glyphicon glyphicon-home"></i><span>HOME</span></a></li>--%>
+                        <%----%>
+                        <%--<li class="accordion">--%>
+                            <%--<a href="/m/menu.do"><i class="glyphicon glyphicon-user"></i><span>系统管理</span></a>--%>
+                            <%--<ul class="nav nav-pills nav-stacked">--%>
+                                <%--<li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findUser.do"><i class="glyphicon glyphicon-user"></i><span>用户管理</span></a></li>--%>
+                                <%----%>
+                                <%--<li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRole.do"><i class="glyphicon glyphicon-user"></i><span>角色管理</span></a>--%>
+                                <%--</li>--%>
+                                <%--<li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRolePermission.do"><i class="glyphicon glyphicon-user"></i><span> 用户与角色管理</span></a>--%>
+                                <%--</li>--%>
+                                <%--<li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findPermission.do"><i class="glyphicon glyphicon-user"></i><span>权限管理</span></a>--%>
+                                <%--</li>--%>
+                            <%--</ul>--%>
+                        <%--</li>--%>
 
-                        <li><a class="ajax-link" href="#"><i class="glyphicon glyphicon-home"></i><span>HOME</span></a>
-                        </li>
-                        <li class="accordion">
-                            <a href="#"><i class="glyphicon glyphicon-user"></i><span>系统管理</span></a>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findUser.do"><i class="glyphicon glyphicon-user"></i><span>用户管理</span></a>
-                                </li>
-                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRole.do"><i class="glyphicon glyphicon-user"></i><span>角色管理</span></a>
-                                </li>
-                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findRolePermission.do"><i class="glyphicon glyphicon-user"></i><span> 用户与角色管理</span></a>
-                                </li>
-                                <li><a class="ajax-link" href="${pageContext.request.contextPath}/m/findPermission.do"><i class="glyphicon glyphicon-user"></i><span>权限管理</span></a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <label id="for-is-ajax" for="is-ajax"><input id="is-ajax" type="checkbox"> Ajax on menu</label>
+
+
+                        <label id="for-is-ajax" for="is-ajax"><input id="is-ajax" type="checkbox"> Ajax on menu</label>
                 </div>
             </div>
         </div>
         <!--/span-->
         <!-- left menu ends -->
-
+        <!-- left menu starts -->
+        <%--<div class="col-sm-2 col-lg-2">--%>
+            <%--<div class="sidebar-nav">--%>
+                <%--<div class="nav-canvas">--%>
+                    <%--<div class="nav-sm nav nav-stacked">--%>
+                    <%--</div>--%>
+                    <%--${menu}--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <!--/span-->
         <noscript>
             <div class="alert alert-block col-md-12">
                 <h4 class="alert-heading">Warning!</h4>

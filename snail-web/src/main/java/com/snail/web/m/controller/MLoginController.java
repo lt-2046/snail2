@@ -1,6 +1,6 @@
 package com.snail.web.m.controller;
 
-import com.snail.model.m.mapper.MPermissionMapper;
+import com.snail.service.m.PermissionService;
 import com.snail.service.m.UserService;
 import com.snail.shiro.utils.TokenManager;
 import com.snail.web.base.BaseController;
@@ -29,7 +29,7 @@ public class MLoginController extends BaseController {
     @Autowired
     private UserService userService;
     @Autowired
-    private MPermissionMapper permissionMapper;
+    private PermissionService permissionService;
 
     @RequestMapping(value = "/login.do")
     @ResponseBody
@@ -56,6 +56,9 @@ public class MLoginController extends BaseController {
 
     @RequestMapping(value = "/menu.do")
     public String menu(ModelMap map, LoginVo loginVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String menuString = permissionService.findPermissionByMenu();
+        map.put("menu",menuString);
+        TokenManager.setVal2Session("menu",menuString);
         return "menu";
     }
 }
