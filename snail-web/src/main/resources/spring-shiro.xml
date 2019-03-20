@@ -4,6 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -11,6 +12,7 @@
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -92,24 +94,21 @@
         <!--</property>-->
         <!--配置自定义过滤器-->
         <property name="filters">
-
-            <map>
-                <entry key="login">
-                    <bean class="com.snail.shiro.filter.MyShiroPermFilter"></bean>
-                </entry>
-                <entry key="role">
-                    <bean class="com.snail.shiro.filter.RoleFilter"></bean>
-                </entry>
-                <entry key="permission">
-                    <bean class="com.snail.shiro.filter.PermissionFilter"></bean>
-                </entry>
-            </map>
+            <util:map>
+                <entry key="login" value-ref="login"></entry>
+                <entry key="role" value-ref="role"></entry>
+                <entry key="permission" value-ref="permission"></entry>
+            </util:map>
         </property>
+
     </bean>
+    <bean id="login" class="com.snail.shiro.filter.MyShiroPermFilter"/>
+    <bean id="role" class="com.snail.shiro.filter.RoleFilter"/>
+    <bean id="permission" class="com.snail.shiro.filter.PermissionFilter"/>
 
     <!-- 配置自定义缓存管理器，中引入ECCache缓存管理器 -->
     <!-- 参考http://www.cnblogs.com/zfding/p/8536480.html-->
-    <bean id = "shiroSpringCacheManager" class="com.snail.shiro.cache.ShiroECCacheManager">
+    <bean id="shiroSpringCacheManager" class="com.snail.shiro.cache.ShiroECCacheManager">
         <property name="cacheManager" ref="cacheManager"/>
         <!--由于使用spring项目托管cache接口。无法获取cache中全部信息，所以增加ehcache原生包中缓存管理类进行直接管理-->
         <property name="ehCacheManager" ref="ehcacheFactory"/>
@@ -163,8 +162,6 @@
         <property name="interval" value="1800000"/>
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
-
-
 
 
     <!-- 会话Cookie模板 -->
